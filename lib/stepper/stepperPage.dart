@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mycar/models/delivery.dart';
 import 'package:mycar/services/delivery_service.dart';
 import 'package:provider/provider.dart';
 
@@ -17,12 +18,8 @@ import 'package:mycar/utilis/error/show_error.dart';
 import 'package:mycar/utilis/http/http_exception.dart';
 
 import '../constance/global.dart' as globals;
-import 'contact.dart';
 import 'date_selector.dart';
-import 'paymentMethod.dart';
-import 'personnal.dart';
 import 'planification.dart';
-import 'recapDemande.dart';
 import 'upload.dart';
 
 class FlutterStepperPage extends StatefulWidget {
@@ -709,92 +706,109 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
       ),
       Step(
         title: Text(''),
-        content: Column(children: <Widget>[
-          Center(
-            child: Text(
-              "Planification du ramassage du colis",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 20),
+        content: Form(
+          key: formKey,
+          child: Column(children: <Widget>[
+            Center(
+              child: Text(
+                "Planification du ramassage du colis",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 20),
+              ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          _ButtonColise(),
-          _ButtonPersonnalite(Auto),
-        ]),
+            SizedBox(
+              height: 20,
+            ),
+            _ButtonColise(),
+            _ButtonPersonnalite(Auto),
+          ]),
+        ),
         //content: PlanificationRamassage(),
         state: currentStep == 2 ? StepState.editing : StepState.indexed,
         isActive: true,
       ),
       Step(
         title: Text('  '),
-        content: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: Text(
-                "Récapitulatif de votre demande de livraison de colis",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.normal,
-                    fontSize: 20),
+        content: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: Text(
+                  "Récapitulatif de votre demande de livraison de colis",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 20),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Column(children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Image.asset(
-                          'assets/images/intro_3.png',
-                        ),
-                        Text(
-                          'Lieu de ramassage',
-                          style: TextStyle(),
-                        ),
-                        SizedBox(height: 20),
-                        // Text(PersonalState.ramassageAddressController.text,
-                        //     style: TextStyle(fontSize: 16)),
-                      ],
+              SizedBox(
+                height: 10,
+              ),
+              Column(children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/images/intro_3.png',
+                          ),
+                          Text(
+                            'Lieu de ramassage',
+                            style: TextStyle(),
+                          ),
+                          SizedBox(height: 25),
+                          Text(ramassageAddressController.text,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueAccent)),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Image.asset('assets/images/intro_2.png'),
-                        Text('Date de ramassage'),
-                        SizedBox(height: 20),
-                        // Text(PersonalState.ramassageAddressController.text,
-                        //     style: TextStyle(fontSize: 16)),
-                      ],
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          Image.asset('assets/images/intro_2.png'),
+                          Text('Date de ramassage'),
+                          SizedBox(height: 25),
+                          Text(
+                            Auto.toString(),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueAccent),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Image.asset('assets/images/intro_3.png'),
-                        Text('Lieu de Livraison'),
-                        SizedBox(height: 20),
-                        Text(liVAddressController.text,
-                            style: TextStyle(fontSize: 16)),
-                      ],
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          Image.asset('assets/images/intro_3.png'),
+                          Text('Lieu de Livraison'),
+                          SizedBox(height: 25),
+                          Text(liVAddressController.text,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueAccent)),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ]),
-          ],
+                  ],
+                )
+              ]),
+            ],
+          ),
         ),
         //content: Recapitulatif(),
         state: currentStep == 3 ? StepState.editing : StepState.indexed,
@@ -803,277 +817,290 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
       Step(
         title: Text(''),
         //content: PaymentMethod(),
-        content: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: Column(
-            children: <Widget>[
-              Text(
-                "Payer la demande de livraison",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.normal,
-                    fontSize: 20),
-              ),
-              //  Padding(padding: EdgeInsets.all(8.0),
-              //  child: Text('Paiement',style: TextStyle(color: Colors.black,fontFamily: "regular",
-              //  fontStyle: FontStyle.normal,fontSize: 18),
-
-              //  ),
-
-              //  ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                'Vous serez facturé de 2408.1 XAF des la prise en charge de la livraison.',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: "regular",
-                    fontStyle: FontStyle.normal,
-                    fontSize: 16),
-              ),
-              SizedBox(height: 40.0),
-              ExpansionTile(
-                title: Text(
-                  "MOBIL MONEY",
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+        content: Form(
+          key: formKey,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "Payer la demande de livraison",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 20),
                 ),
-                children: <Widget>[
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).backgroundColor,
-                        borderRadius: BorderRadius.all(Radius.circular(38)),
-                        border: Border.all(
-                            color: Theme.of(context).dividerColor, width: 0.6),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          SizedBox(
-                            width: 70,
-                            height: 50,
-                            child: CountryCodePicker(
-                              onChanged: (e) {
-                                setState(() {
-                                  countryCode = e.dialCode;
-                                });
-                              },
-                              initialSelection: 'cm',
-                              showFlagMain: true,
-                              showFlag: true,
-                              favorite: ['+237', 'cm'],
+                //  Padding(padding: EdgeInsets.all(8.0),
+                //  child: Text('Paiement',style: TextStyle(color: Colors.black,fontFamily: "regular",
+                //  fontStyle: FontStyle.normal,fontSize: 18),
+
+                //  ),
+
+                //  ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  'Vous serez facturé de 2408.1 XAF des la prise en charge de la livraison.',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: "regular",
+                      fontStyle: FontStyle.normal,
+                      fontSize: 16),
+                ),
+                SizedBox(height: 40.0),
+                ExpansionTile(
+                  title: Text(
+                    "MOBIL MONEY",
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 16, right: 16, bottom: 16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).backgroundColor,
+                          borderRadius: BorderRadius.all(Radius.circular(38)),
+                          border: Border.all(
+                              color: Theme.of(context).dividerColor,
+                              width: 0.6),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 70,
+                              height: 50,
+                              child: CountryCodePicker(
+                                onChanged: (e) {
+                                  setState(() {
+                                    countryCode = e.dialCode;
+                                  });
+                                },
+                                initialSelection: 'cm',
+                                showFlagMain: true,
+                                showFlag: true,
+                                favorite: ['+237', 'cm'],
+                              ),
                             ),
-                          ),
-                          Container(
-                            color: Theme.of(context).dividerColor,
-                            height: 30,
-                            width: 2,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 0, right: 16),
-                              child: Container(
-                                height: 40,
-                                child: TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return AppLocalizations.of(
-                                          'Numero de telephone invalide');
-                                    }
+                            Container(
+                              color: Theme.of(context).dividerColor,
+                              height: 30,
+                              width: 2,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 0, right: 16),
+                                child: Container(
+                                  height: 40,
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return AppLocalizations.of(
+                                            'Numero de telephone invalide');
+                                      }
 
-                                    if (value.length < 9) {
-                                      return AppLocalizations.of(
-                                          'Doit être au moins de 9 chiffres');
-                                    }
-                                    return getValidationError(value);
-                                  },
-                                  controller:
-                                      payementphoneTextEditingController,
-                                  focusNode: phoneFocusNode,
-                                  maxLines: 1,
-                                  onChanged: (String txt) {
-                                    var phoneNumber = txt;
-                                  },
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                  cursorColor: Theme.of(context).primaryColor,
-                                  decoration: new InputDecoration(
-                                    errorText: null,
-                                    border: InputBorder.none,
-                                    hintText: AppLocalizations.of(
-                                        "Numero de téléphone "),
-                                    hintStyle: TextStyle(
-                                        color: Theme.of(context).disabledColor),
-                                  ),
-                                  keyboardType: TextInputType.phone,
-                                  inputFormatters: <TextInputFormatter>[],
+                                      if (value.length < 9) {
+                                        return AppLocalizations.of(
+                                            'Doit être au moins de 9 chiffres');
+                                      }
+                                      return getValidationError(value);
+                                    },
+                                    controller:
+                                        payementphoneTextEditingController,
+                                    focusNode: phoneFocusNode,
+                                    maxLines: 1,
+                                    onChanged: (String txt) {
+                                      var phoneNumber = txt;
+                                    },
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                    cursorColor: Theme.of(context).primaryColor,
+                                    decoration: new InputDecoration(
+                                      errorText: null,
+                                      border: InputBorder.none,
+                                      hintText: AppLocalizations.of(
+                                          "Numero de téléphone "),
+                                      hintStyle: TextStyle(
+                                          color:
+                                              Theme.of(context).disabledColor),
+                                    ),
+                                    keyboardType: TextInputType.phone,
+                                    inputFormatters: <TextInputFormatter>[],
 
-                                  //  onSaved: (String value){
-                                  //   phoneTextEditingController = value as TextEditingController;
-                                  // },
+                                    //  onSaved: (String value){
+                                    //   phoneTextEditingController = value as TextEditingController;
+                                    // },
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  //SizedBox(height: 10,),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 0,
-                      right: 10,
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.all(Radius.circular(24.0)),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: FlatButton(
-                          // borderRadius: BorderRadius.all(Radius.circular(24.0)),
-                          highlightColor: Colors.transparent,
-                          onPressed: () {},
-                          child: Text(
-                            AppLocalizations.of('Payer'),
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle1
-                                .copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                          ),
+                          ],
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ExpansionTile(
-                title: Text(
-                  "PAYPAL/CARTE BANCAIRE",
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                ),
-                children: <Widget>[
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).backgroundColor,
-                        borderRadius: BorderRadius.all(Radius.circular(38)),
-                        border: Border.all(
-                            color: Theme.of(context).dividerColor, width: 0.6),
+                    //SizedBox(height: 10,),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 0,
+                        right: 10,
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Center(
-                            child: TextButton(
-                                onPressed: () => {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              UsePaypal(
-                                                  sandboxMode: true,
-                                                  clientId:
-                                                      "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
-                                                  secretKey:
-                                                      "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
-                                                  returnURL:
-                                                      "https://samplesite.com/return",
-                                                  cancelURL:
-                                                      "https://samplesite.com/cancel",
-                                                  transactions: const [
-                                                    {
-                                                      "amount": {
-                                                        "total": '10.12',
-                                                        "currency": "USD",
-                                                        "details": {
-                                                          "subtotal": '10.12',
-                                                          "shipping": '0',
-                                                          "shipping_discount": 0
-                                                        }
-                                                      },
-                                                      "description":
-                                                          "The payment transaction description.",
-                                                      // "payment_options": {
-                                                      //   "allowed_payment_method":
-                                                      //       "INSTANT_FUNDING_SOURCE"
-                                                      // },
-                                                      "item_list": {
-                                                        "items": [
-                                                          {
-                                                            "name":
-                                                                "A demo product",
-                                                            "quantity": 1,
-                                                            "price": '10.12',
-                                                            "currency": "USD"
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.all(Radius.circular(24.0)),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: FlatButton(
+                            // borderRadius: BorderRadius.all(Radius.circular(24.0)),
+                            highlightColor: Colors.transparent,
+                            onPressed: () {},
+                            child: Text(
+                              AppLocalizations.of('Payer'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ExpansionTile(
+                  title: Text(
+                    "PAYPAL/CARTE BANCAIRE",
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 16, right: 16, bottom: 16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).backgroundColor,
+                          borderRadius: BorderRadius.all(Radius.circular(38)),
+                          border: Border.all(
+                              color: Theme.of(context).dividerColor,
+                              width: 0.6),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Center(
+                              child: TextButton(
+                                  onPressed: () => {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                UsePaypal(
+                                                    sandboxMode: true,
+                                                    clientId:
+                                                        "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
+                                                    secretKey:
+                                                        "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
+                                                    returnURL:
+                                                        "https://samplesite.com/return",
+                                                    cancelURL:
+                                                        "https://samplesite.com/cancel",
+                                                    transactions: const [
+                                                      {
+                                                        "amount": {
+                                                          "total": '10.12',
+                                                          "currency": "USD",
+                                                          "details": {
+                                                            "subtotal": '10.12',
+                                                            "shipping": '0',
+                                                            "shipping_discount":
+                                                                0
                                                           }
-                                                        ],
-
-                                                        // shipping address is not required though
-                                                        "shipping_address": {
-                                                          "recipient_name":
-                                                              "Jane Foster",
-                                                          "line1":
-                                                              "Travis County",
-                                                          "line2": "",
-                                                          "city": "Austin",
-                                                          "country_code": "US",
-                                                          "postal_code":
-                                                              "73301",
-                                                          "phone": "+00000000",
-                                                          "state": "Texas"
                                                         },
+                                                        "description":
+                                                            "The payment transaction description.",
+                                                        // "payment_options": {
+                                                        //   "allowed_payment_method":
+                                                        //       "INSTANT_FUNDING_SOURCE"
+                                                        // },
+                                                        "item_list": {
+                                                          "items": [
+                                                            {
+                                                              "name":
+                                                                  "A demo product",
+                                                              "quantity": 1,
+                                                              "price": '10.12',
+                                                              "currency": "USD"
+                                                            }
+                                                          ],
+
+                                                          // shipping address is not required though
+                                                          "shipping_address": {
+                                                            "recipient_name":
+                                                                "Jane Foster",
+                                                            "line1":
+                                                                "Travis County",
+                                                            "line2": "",
+                                                            "city": "Austin",
+                                                            "country_code":
+                                                                "US",
+                                                            "postal_code":
+                                                                "73301",
+                                                            "phone":
+                                                                "+00000000",
+                                                            "state": "Texas"
+                                                          },
+                                                        }
                                                       }
-                                                    }
-                                                  ],
-                                                  note:
-                                                      "Contact us for any questions on your order.",
-                                                  onSuccess:
-                                                      (Map params) async {
-                                                    print("onSuccess: $params");
-                                                  },
-                                                  onError: (error) {
-                                                    print("onError: $error");
-                                                  },
-                                                  onCancel: (params) {
-                                                    print('cancelled: $params');
-                                                  }),
-                                        ),
-                                      )
-                                    },
-                                child: const Text("Payement par Paypal")),
-                          )
-                        ],
+                                                    ],
+                                                    note:
+                                                        "Contact us for any questions on your order.",
+                                                    onSuccess:
+                                                        (Map params) async {
+                                                      print(
+                                                          "onSuccess: $params");
+                                                    },
+                                                    onError: (error) {
+                                                      print("onError: $error");
+                                                    },
+                                                    onCancel: (params) {
+                                                      print(
+                                                          'cancelled: $params');
+                                                    }),
+                                          ),
+                                        )
+                                      },
+                                  child: const Text("Payement par Paypal")),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  //SizedBox(height: 10,),
-                ],
-              ),
-            ],
+                    //SizedBox(height: 10,),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-        state: currentStep == 4 ? StepState.editing : StepState.indexed,
+        state: currentStep == 4 ? StepState.editing : StepState.complete,
         isActive: true,
       ),
-      Step(
-        title: Text(''),
-        content: Upload(mapData),
-        state: StepState.complete,
-        isActive: true,
-      ),
+      // Step(
+      //   title: Text(''),
+      //   content: Form(key: formKey, child: Upload(mapData)),
+      //   state: StepState.complete,
+      //   isActive: true,
+      // ),
     ];
     return Scaffold(
       appBar: AppBar(
@@ -1107,13 +1134,16 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
                               .then((value) => {currentStep = currentStep + 1});
                         } else {}
                       } else if (currentStep == 1 &&
-                          ContactState.formKey.currentState.validate()) {
+                          formKey.currentState.validate()) {
                         currentStep = currentStep + 1;
                       } else if (currentStep != 0 && currentStep != 1) {
                         currentStep = currentStep + 1;
                       }
-                    } else {
-                      currentStep = 0;
+                    } else if (currentStep == 4 &&
+                        formKey.currentState.validate()) {
+                      store(formKey);
+
+                      // currentStep = 0;
                     }
                   });
                 },
@@ -1632,17 +1662,18 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
 
     bool isSave = false;
     formKey.currentState.save();
-    // var addressValue = <String, dynamic>{
-    //   'address': ramassageAddressController.text,
-    //   'address_id': placeId,
-    //   'city': city,
-    //   'country': country,
-    //   'latitude': latitude,
-    //   'longitude': longitude,
-    //   'type': 'personal',
-    // };
+    var addressValue = <String, dynamic>{
+      'address': ramassageAddressController.text,
+      'address_id': placeId,
+      'city': city,
+      'country': country,
+      'latitude': latitude,
+      'longitude': longitude,
+      'type': 'personal',
+    };
 
-    final params = <String, dynamic>{
+    final Map<String, dynamic> params = <String, dynamic>{
+      'address': addressValue,
       'name': nameTextEditingController.text,
       'surname': surnameTextEditingController.text,
       'phone': phoneTextEditingController.text.isNotEmpty
@@ -1667,7 +1698,8 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
     };
     ShowError.show(params.toString());
     try {
-      await Provider.of<DeliveryService>(context, listen: false).store(params);
+      await Provider.of<DeliveryService>(context, listen: false)
+          .store(params, String);
 
       setState(() {
         isLoading = false;

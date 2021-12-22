@@ -2,12 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:global_configuration/global_configuration.dart';
 //import 'package:mycar/Datahandler/appData.dart';
 import 'package:mycar/constance/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mycar/modules/auth/demandeLiv.dart';
+import 'package:mycar/models/user.dart';
 import 'package:mycar/modules/auth/login_screen.dart';
 import 'package:mycar/modules/home/mainScreen.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +18,9 @@ import 'package:mycar/constance/global.dart' as globals;
 import 'modules/auth/register.dart';
 import 'modules/home/home_screen.dart';
 import 'modules/splash/SplashScreen.dart';
-import 'modules/splash/introductionScreen.dart';
 import 'modules/splash/nice_introduction_screen.dart';
 import 'services/auth.service.dart';
+import 'services/delivery_service.dart';
 import 'stepper/stepperPage.dart';
 
 // void main() async {
@@ -63,6 +62,8 @@ class _MyAppState extends State<MyApp> {
     GlobalKey<FormState>(),
     GlobalKey<FormState>()
   ];
+
+  var user;
   void changeTheme() {
     this.setState(() {
       var globals;
@@ -103,7 +104,7 @@ class _MyAppState extends State<MyApp> {
 
         providers: [
           Provider<AuthService>(create: (_) => AuthService()),
-          //Provider<AppData>(create: (_) => AppData()),
+          Provider<DeliveryService>(create: (_) => DeliveryService(user, key)),
         ],
         child: Container(
           key: key,
@@ -164,6 +165,5 @@ class _MyAppState extends State<MyApp> {
     Routes.LOGIN: (BuildContext context) => LoginScreen(),
     Routes.REGISTER: (BuildContext context) => RegisterScreen(),
     Routes.STEPPER: (BuildContext context) => FlutterStepperPage(),
-    Routes.MAINSCREEN: (BuildContext context) => MainScreen(),
   };
 }

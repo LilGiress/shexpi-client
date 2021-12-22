@@ -43,7 +43,7 @@ class UploadState extends State<Upload> {
     // mapData["descriptionLieu"] =
     //     ContactState.liVdescriptionTextEditingController.text;
 
-    mapData["planing"] = PlanificationRamassageState.Auto.toString();
+    // mapData["planing"] = PlanificationRamassageState.Auto.toString();
     // mapData["planingJours"] = PlanificationRamassageState.deliveryHour;
     // mapData["planingHeure"] = PlanificationRamassageState.deliveryTime;
 
@@ -57,7 +57,7 @@ class UploadState extends State<Upload> {
                 "Name: ",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              Text(mapData["first_name"], style: TextStyle(fontSize: 16)),
+              //Text(mapData["first_name"], style: TextStyle(fontSize: 16)),
             ],
           ),
           SizedBox(height: 20),

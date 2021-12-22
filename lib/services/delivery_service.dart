@@ -1,24 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
-import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:mycar/models/address.dart';
 import 'package:mycar/models/delivery.dart';
 import 'package:mycar/models/user.dart';
+import 'package:mycar/services/auth.service.dart';
+import 'package:mycar/services/http_client.dart';
 
-import 'package:mycar/utilis/http/api_interceptor.dart';
 import 'package:provider/provider.dart';
 
-import 'auth.service.dart';
-import 'http_client.dart';
-
 class DeliveryService with ChangeNotifier {
-  static final http = InterceptedClient.build(interceptors: [
-    ApiInterceptor(),
-  ]);
+  final User user;
+
   final GlobalKey<ScaffoldState> scaffoldKey;
-  DeliveryService({this.scaffoldKey});
 
   User _authUser;
   Address address;
@@ -28,6 +21,9 @@ class DeliveryService with ChangeNotifier {
   List<Delivery> _deliveries = [];
 
   Delivery _delivery;
+
+  DeliveryService(this.user, GlobalKey<ScaffoldState> scaffoldKey)
+      : scaffoldKey = scaffoldKey;
 
   //Delivery get delivery => _delivery;
 
@@ -39,60 +35,58 @@ class DeliveryService with ChangeNotifier {
     return _authUser;
   }
 
-  Future<void> store(Map<String, dynamic> delivery) async {
-    Map<String, String> header = {"Content-Type": "application/json"};
+  Future<void> fetchDeliveries(BuildContext context) async {
+    var authService = Provider.of<AuthService>(context, listen: false);
 
-    await Client.post('users/:userId/deliveries',
-        headers: header, body: jsonEncode(delivery));
+    final response =
+        await Client.get('users/${authService.authUser.id}/deliveries');
+    //final response = await AuthService.get('users/${auth.authUser.id}/deliveries');
+
+    final extractedData = response as List<dynamic>;
+
+    final List<Delivery> responseDeliveries = [];
+
+    extractedData.forEach((element) {
+      responseDeliveries
+          .add(Delivery.fromJSON(element as Map<String, dynamic>));
+    });
+
+    _deliveries = responseDeliveries;
+
+    _isLoading = false;
 
     notifyListeners();
   }
 
-  Future<void> register(Map<String, dynamic> userData) async {
-    Map<String, String> header = {"Content-Type": "application/json"};
+  Future<Delivery> findById(BuildContext context, String deliveryId) async {
+    var authService = Provider.of<AuthService>(context, listen: false);
 
-    await Client.post('auth/signup',
-        headers: header, body: jsonEncode(userData));
+    final response = await Client.get(
+        'users/${authService.authUser.id}/deliveries/$deliveryId');
 
-    //await login(userData['email'], userData['password']);
+    final Delivery extractedData = Delivery.fromJSON(response);
+
+    if (response != null) {
+      _delivery = extractedData;
+    }
+    notifyListeners();
+
+    //return response != null ? extractedData : null;
   }
 
-  // Deliveries(this.user);
+  Future<void> store(Map<String, dynamic> delivery, context) async {
+    var authService = Provider.of<AuthService>(context, listen: false);
 
-  // Future<void> fetchDeliveries(BuildContext context) async {
-  //   var auth = Provider.of<AuthService>(context, listen: false);
+    final response =
+        await Client.post('users/${authService.authUser.id}/deliveries');
 
-  //   final response = await AuthService.get('users/${auth.authUser.id}/deliveries');
+    final Delivery extractedData = Delivery.fromJSON(response);
 
-  //   final extractedData = response as List<dynamic>;
+    if (response != null) {
+      _delivery = extractedData;
+    }
+    notifyListeners();
 
-  //   final List<Delivery> responseDeliveries = [];
-
-  //   extractedData.forEach((element) {
-  //     responseDeliveries
-  //         .add(Delivery.fromJSON(element as Map<String, dynamic>));
-  //   });
-
-  //   _deliveries = responseDeliveries;
-
-  //   _isLoading = false;
-
-  //   notifyListeners();
-  // }
-
-  // Future<Delivery> findById(BuildContext context, String deliveryId) async {
-  //   var auth = Provider.of<AuthService>(context, listen: false);
-
-  //   final response =
-  //       await AuthService.get('users/${auth.authUser.id}/deliveries/$deliveryId');
-
-  //   final Delivery extractedData = Delivery.fromJSON(response);
-
-  //   if (response != null) {
-  //     _delivery = extractedData;
-  //   }
-  //   notifyListeners();
-
-  //   //return response != null ? extractedData : null;
-  // }
+    //return response != null ? extractedData : null;
+  }
 }

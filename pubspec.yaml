@@ -43,7 +43,6 @@ dependencies:
   global_configuration: 2.0.0-nullsafety.0
   geocoding: ^2.0.0
   uuid: ^3.0.5
-
   location: ^4.3.0
   datetime_picker_formfield: ^2.0.0
   date_format: ^2.0.4
