@@ -48,7 +48,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      AppLocalizations.of('History'),
+                      AppLocalizations.of('My Orders'),
                       style: Theme.of(context).textTheme.headline5.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -56,7 +56,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     ),
                     ClipRect(
                       child: BackdropFilter(
-                        filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                        filter:
+                            new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                         child: Container(
                           decoration: new BoxDecoration(
                             color: Colors.grey.shade200.withOpacity(0.5),
@@ -72,7 +73,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   padding: const EdgeInsets.only(left: 2),
                                   child: Text(
                                     AppLocalizations.of('Oct 15,2020'),
-                                    style: Theme.of(context).textTheme.subtitle2.copyWith(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2
+                                        .copyWith(
                                           color: Colors.white,
                                         ),
                                   ),
@@ -93,72 +97,79 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   ],
                 ),
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.only(top: 0, right: 14, left: 14),
-                  child: Column(
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {
-                          gotorating();
-                        },
-                        child: CardWidget(
-                          fromAddress: AppLocalizations.of('465 Swift Village'),
-                          toAddress: AppLocalizations.of('105 William St, Chicago, US'),
-                          price: "\$75.00",
-                          status: AppLocalizations.of('Confirm'),
-                          statusColor: HexColor("#3638FE"),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          gotorating();
-                        },
-                        child: CardWidget(
-                          fromAddress: AppLocalizations.of('026 Mitchell Burg Apt. 567'),
-                          toAddress: AppLocalizations.of('342 Lottie Views 435'),
-                          price: "\$30.00",
-                          status: AppLocalizations.of('Completed'),
-                          statusColor: HexColor("#55E274"),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          gotorating();
-                        },
-                        child: CardWidget(
-                          fromAddress: AppLocalizations.of('25 Stacy Falls Suite 453'),
-                          toAddress: AppLocalizations.of('090 Joaquian isle Suite 76'),
-                          price: "\$35.00",
-                          status: AppLocalizations.of('Cancelled'),
-                          statusColor: Theme.of(context).disabledColor,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          gotorating();
-                        },
-                        child: CardWidget(
-                          fromAddress: AppLocalizations.of('465 Swift Village'),
-                          toAddress: AppLocalizations.of('105 William St, Chicago, US'),
-                          price: "\$75.00",
-                          status: AppLocalizations.of('Confirm'),
-                          statusColor: HexColor("#3638FE"),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
+              _tabSection(context),
+              // Expanded(
+              //   child: SingleChildScrollView(
+              //     padding: EdgeInsets.only(top: 0, right: 14, left: 14),
+              //     child: Column(
+              //       children: <Widget>[
+              //         InkWell(
+              //           onTap: () {
+              //             gotorating();
+              //           },
+              //           child: CardWidget(
+              //             fromAddress: AppLocalizations.of('465 Swift Village'),
+              //             toAddress: AppLocalizations.of(
+              //                 '105 William St, Chicago, US'),
+              //             price: "\$75.00",
+              //             status: AppLocalizations.of('Confirm'),
+              //             statusColor: HexColor("#3638FE"),
+              //           ),
+              //         ),
+              //         SizedBox(
+              //           height: 16,
+              //         ),
+              //         InkWell(
+              //           onTap: () {
+              //             gotorating();
+              //           },
+              //           child: CardWidget(
+              //             fromAddress:
+              //                 AppLocalizations.of('026 Mitchell Burg Apt. 567'),
+              //             toAddress:
+              //                 AppLocalizations.of('342 Lottie Views 435'),
+              //             price: "\$30.00",
+              //             status: AppLocalizations.of('Completed'),
+              //             statusColor: HexColor("#55E274"),
+              //           ),
+              //         ),
+              //         SizedBox(
+              //           height: 16,
+              //         ),
+              //         InkWell(
+              //           onTap: () {
+              //             gotorating();
+              //           },
+              //           child: CardWidget(
+              //             fromAddress:
+              //                 AppLocalizations.of('25 Stacy Falls Suite 453'),
+              //             toAddress:
+              //                 AppLocalizations.of('090 Joaquian isle Suite 76'),
+              //             price: "\$35.00",
+              //             status: AppLocalizations.of('Cancelled'),
+              //             statusColor: Theme.of(context).disabledColor,
+              //           ),
+              //         ),
+              //         SizedBox(
+              //           height: 16,
+              //         ),
+              //         InkWell(
+              //           onTap: () {
+              //             gotorating();
+              //           },
+              //           child: CardWidget(
+              //             fromAddress: AppLocalizations.of('465 Swift Village'),
+              //             toAddress: AppLocalizations.of(
+              //                 '105 William St, Chicago, US'),
+              //             price: "\$75.00",
+              //             status: AppLocalizations.of('Confirm'),
+              //             statusColor: HexColor("#3638FE"),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ],
@@ -171,6 +182,103 @@ class _HistoryScreenState extends State<HistoryScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => RatingScreen(),
+      ),
+    );
+  }
+
+  Widget _tabSection(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            child: TabBar(
+              indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50), // Creates border
+                  color: Colors.lightBlueAccent),
+              tabs: [
+                Tab(
+                  text: AppLocalizations.of('Waitin'),
+                ),
+                Tab(
+                  text: AppLocalizations.of("in Progress"),
+                ),
+                Tab(
+                  text: AppLocalizations.of("History"),
+                ),
+              ],
+            ),
+          ),
+          Flexible(
+            child: Container(
+              height: 200,
+              child: TabBarView(
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          gotorating();
+                        },
+                        child: CardWidget(
+                          fromAddress: AppLocalizations.of('465 Swift Village'),
+                          toAddress: AppLocalizations.of(
+                              '105 William St, Chicago, US'),
+                          price: "\$75.00",
+                          status: AppLocalizations.of('Confirm'),
+                          statusColor: HexColor("#3638FE"),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  //////////////////////////
+                  ///   second tabbarview
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          gotorating();
+                        },
+                        child: CardWidget(
+                          fromAddress: AppLocalizations.of('465 Swift Village'),
+                          toAddress: AppLocalizations.of(
+                              '105 William St, Chicago, US'),
+                          price: "\$75.00",
+                          status: AppLocalizations.of('Confirm'),
+                          statusColor: HexColor("#3638FE"),
+                        ),
+                      ),
+                    ),
+                  ),
+                  ////////////////////////
+                  ///   thirs tabBar view
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          gotorating();
+                        },
+                        child: CardWidget(
+                          fromAddress: AppLocalizations.of('465 Swift Village'),
+                          toAddress: AppLocalizations.of(
+                              '105 William St, Chicago, US'),
+                          price: "\$75.00",
+                          status: AppLocalizations.of('Confirm'),
+                          statusColor: HexColor("#3638FE"),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

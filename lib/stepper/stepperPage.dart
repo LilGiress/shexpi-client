@@ -48,7 +48,13 @@ enum Choice { moi, autre }
 enum Character { isPossible, isTard }
 
 class _FlutterStepperPageState extends State<FlutterStepperPage> {
-  final formKey = GlobalKey<FormState>();
+  List<GlobalKey<FormState>> formKeys = [
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>()
+  ];
   int currentStep = 0;
   String countryCode = "+237";
   var isLoading = false;
@@ -265,7 +271,7 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
       Step(
         title: Text(' '),
         content: Form(
-          key: formKey,
+          key: formKeys[0],
           //autovalidate: false,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -492,7 +498,7 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
       Step(
         title: Text(' '),
         content: Form(
-          key: formKey,
+          key: formKeys[1],
           child: Column(
             children: <Widget>[
               Row(
@@ -707,7 +713,7 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
       Step(
         title: Text(''),
         content: Form(
-          key: formKey,
+          key: formKeys[2],
           child: Column(children: <Widget>[
             Center(
               child: Text(
@@ -733,7 +739,7 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
       Step(
         title: Text('  '),
         content: Form(
-          key: formKey,
+          key: formKeys[3],
           child: Column(
             children: [
               Padding(
@@ -818,7 +824,7 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
         title: Text(''),
         //content: PaymentMethod(),
         content: Form(
-          key: formKey,
+          key: formKeys[4],
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Column(
@@ -1128,22 +1134,29 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
                 onStepContinue: () {
                   setState(() {
                     if (currentStep < steps.length - 1) {
-                      if (currentStep == 0 && formKey.currentState.validate()) {
+                      if (currentStep == 0 &&
+                          formKeys[0].currentState.validate()) {
                         if (authService.authUser == null) {
-                          register(formKey)
+                          register(formKeys[0])
                               .then((value) => {currentStep = currentStep + 1});
                         } else {}
                       } else if (currentStep == 1 &&
-                          formKey.currentState.validate()) {
+                          formKeys[1].currentState.validate()) {
+                        formKeys[1].currentState.save();
+                        currentStep = currentStep + 1;
+                      } else if (currentStep == 2 &&
+                          formKeys[2].currentState.validate()) {
+                        formKeys[2].currentState.save();
                         currentStep = currentStep + 1;
                       } else if (currentStep != 0 && currentStep != 1) {
                         currentStep = currentStep + 1;
                       }
                     } else if (currentStep == 4 &&
-                        formKey.currentState.validate()) {
-                      store(formKey);
+                        formKeys[4].currentState.validate()) {
+                      formKeys[4].currentState.save();
+                      store();
 
-                      // currentStep = 0;
+                      //currentStep = 0;
                     }
                   });
                 },
@@ -1653,15 +1666,9 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
     return isSave;
   }
 
-  Future<bool> store(GlobalKey<FormState> formKey) async {
-    final isValid = formKey.currentState.validate();
-
-    if (!isValid) {
-      return null;
-    }
-
+  Future<bool> store() async {
     bool isSave = false;
-    formKey.currentState.save();
+
     var addressValue = <String, dynamic>{
       'address': ramassageAddressController.text,
       'address_id': placeId,
@@ -1696,30 +1703,40 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
       'pickup_address': ramassageAddressController.text,
       'delivery_address': liVAddressController.text,
     };
-    ShowError.show(params.toString());
+
     try {
       await Provider.of<DeliveryService>(context, listen: false)
-          .store(params, String);
-
-      setState(() {
-        isLoading = false;
-      });
-      isSave = true;
-      // Navigator.of(context).pushReplacementNamed(Routes.MAINSCREEN);
+          .store(params, context);
     } on HttpException catch (error) {
       if (error.type == ExceptionType.ValidationException) {
         setState(() {
           validationError = error.error;
           ShowError.show(validationError);
         });
-
-        formKey.currentState.validate();
         isSave = false;
       }
     } catch (e) {
       print(e);
       isSave = false;
     }
+
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    //   isSave = true;
+    //   // Navigator.of(context).pushReplacementNamed(Routes.MAINSCREEN);
+    // } on HttpException catch (error) {
+    //   if (error.type == ExceptionType.ValidationException) {
+    //     setState(() {
+    //       validationError = error.error;
+    //       ShowError.show(validationError);
+    //     });
+    //     isSave = false;
+    //   }
+    // } catch (e) {
+    //   print(e);
+    //   isSave = false;
+    // }
     return isSave;
   }
 }

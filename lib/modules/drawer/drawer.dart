@@ -305,13 +305,13 @@ class _AppDrawerState extends State<AppDrawer> {
                               padding: const EdgeInsets.only(left: 4),
                               child: Row(
                                 children: <Widget>[
-                                  widget.selectItemName == 'History'
+                                  widget.selectItemName == 'My Orders'
                                       ? selectedData()
                                       : SizedBox(),
                                   Icon(
                                     FontAwesomeIcons.history,
                                     size: 20,
-                                    color: widget.selectItemName == 'History'
+                                    color: widget.selectItemName == 'My Orders'
                                         ? Theme.of(context).primaryColor
                                         : Theme.of(context)
                                             .disabledColor
@@ -321,7 +321,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                     width: 10,
                                   ),
                                   Text(
-                                    AppLocalizations.of('Historique'),
+                                    AppLocalizations.of('Mes Commandes'),
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle2

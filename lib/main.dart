@@ -6,9 +6,7 @@ import 'package:global_configuration/global_configuration.dart';
 //import 'package:mycar/Datahandler/appData.dart';
 import 'package:mycar/constance/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mycar/models/user.dart';
 import 'package:mycar/modules/auth/login_screen.dart';
-import 'package:mycar/modules/home/mainScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'Language/appLocalizations.dart';
@@ -56,12 +54,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Key key = new UniqueKey();
-  List<GlobalKey<FormState>> formKeys = [
-    GlobalKey<FormState>(),
-    GlobalKey<FormState>(),
-    GlobalKey<FormState>(),
-    GlobalKey<FormState>()
-  ];
 
   var user;
   void changeTheme() {
@@ -104,7 +96,8 @@ class _MyAppState extends State<MyApp> {
 
         providers: [
           Provider<AuthService>(create: (_) => AuthService()),
-          Provider<DeliveryService>(create: (_) => DeliveryService(user, key)),
+          Provider<DeliveryService>(create: (_) => DeliveryService()),
+          //ChangeNotifierProvider(create: (_) => DeliveryService(user, key)),
         ],
         child: Container(
           key: key,

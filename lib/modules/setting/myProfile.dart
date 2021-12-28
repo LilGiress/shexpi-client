@@ -139,29 +139,40 @@ class _MyProfileState extends State<MyProfile> {
                     color: Theme.of(context).dividerColor,
                   ),
                 ),
+                // InkWell(
+                //   onTap: () {
+                //     showCupertinoModalPopup<void>(
+                //       context: context,
+                //       builder: (BuildContext context) {
+                //         return _buildBottomPicker(
+                //           CupertinoDatePicker(
+                //             use24hFormat: true,
+                //             mode: CupertinoDatePickerMode.date,
+                //             initialDateTime: DateTime.now(),
+                //             onDateTimeChanged: (DateTime newDateTime) {},
+                //             maximumYear: 3000,
+                //             minimumYear: 1995,
+                //           ),
+                //         );
+                //       },
+                //     );
+                //   },
+                //   child:
+                //   MyAccountInfo(
+                //     headText: AppLocalizations.of('Birthday'),
+                //     subtext: authService.authUser != null
+                //         ? authService.authUser.birthday
+                //         : '',
+                //   ),
+                // ),
+
                 InkWell(
                   onTap: () {
-                    showCupertinoModalPopup<void>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return _buildBottomPicker(
-                          CupertinoDatePicker(
-                            use24hFormat: true,
-                            mode: CupertinoDatePickerMode.date,
-                            initialDateTime: DateTime.now(),
-                            onDateTimeChanged: (DateTime newDateTime) {},
-                            maximumYear: 3000,
-                            minimumYear: 1995,
-                          ),
-                        );
-                      },
-                    );
+                    _MesCommandes();
                   },
                   child: MyAccountInfo(
-                    headText: AppLocalizations.of('Birthday'),
-                    subtext: authService.authUser != null
-                        ? authService.authUser.birthday
-                        : '',
+                    headText: AppLocalizations.of('My orders'),
+                    subtext: AppLocalizations.of('hi'),
                   ),
                 ),
                 Padding(
@@ -225,6 +236,75 @@ class _MyProfileState extends State<MyProfile> {
             child: picker,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _MesCommandes() {
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Column(children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'waiting',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'In progress',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'History',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ]),
+        ],
       ),
     );
   }
